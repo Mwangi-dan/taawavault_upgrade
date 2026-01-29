@@ -49,16 +49,20 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Create `.env` file:
+4. Configure environment:
+   - Copy `env.example` to `.env`
+   - Set values for your environment (never commit `.env`). Example variables:
 ```bash
-SECRET_KEY=your-secret-key-here
+# Required: set your own values
+SECRET_KEY=<generate-a-secret-key>
 DEBUG=True
-DB_NAME=taawavault
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=localhost
-DB_PORT=5432
-REDIS_URL=redis://localhost:6379/0
+DB_NAME=<your-database-name>
+DB_USER=<your-db-user>
+DB_PASSWORD=<your-db-password>
+DB_HOST=<db-host>
+DB_PORT=<db-port>
+REDIS_URL=redis://<redis-host>:<port>/<db-number>
+# Optional: see env.example for email, S3, API keys, etc.
 ```
 
 5. Run migrations:
@@ -167,12 +171,12 @@ See SRS document Section 18 for deployment architecture:
 
 ## Documentation
 
-Full system specifications available in `SYSTEMS_SPECIFICATIONS_V2.md`.
+See the repository for architecture and deployment details.
 
 ## License
 
-[Your License Here]
+See the LICENSE file in the repository.
 
 ## Support
 
-For issues and questions, please contact [Your Support Contact].
+For issues and questions, open an issue on the repository.
