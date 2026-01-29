@@ -1,0 +1,29 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock head_title %}
+
+{% block content %}
+<div class="auth-card-inner">
+    <div class="auth-card-header">
+        <h1 class="auth-title">{% trans "Sign Out" %}</h1>
+        <p class="auth-subtitle">{% trans "Are you sure you want to sign out?" %}</p>
+    </div>
+
+    <form class="auth-form logout" method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        <div class="auth-form-actions auth-form-actions-logout">
+            <a href="{% url 'dashboard' %}" class="auth-btn auth-btn-secondary">{% trans "Cancel" %}</a>
+            <button type="submit" class="auth-btn auth-btn-primary">{% trans "Sign Out" %}</button>
+        </div>
+    </form>
+
+    <p class="auth-switch">
+        <a href="{% url 'dashboard' %}" class="auth-link-accent">{% trans "Back to dashboard" %}</a>
+    </p>
+</div>
+{% endblock content %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Members - {{ group.name }}{% endblock %}
+{% block breadcrumb %}{{ group.name }} / Members{% endblock %}
+
+{% block content %}
+<div class="member-list-page">
+    <div class="page-header">
+        <h1>Members</h1>
+        {% if is_admin %}
+        <button class="btn-primary">Add Member</button>
+        {% endif %}
+    </div>
+
+    <div class="content-card">
+        <div class="card-content">
+            {% if members %}
+            <div class="members-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Member</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            {% if is_admin %}
+                            <th>Actions</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                        <tr>
+                            <td>
+                                <div class="member-cell">
+                                    <div class="member-avatar">
+                                        <span>{{ member.user.username|first|upper }}</span>
+                                    </div>
+                                    <div class="member-info">
+                                        <h4>{{ member.user.get_full_name|default:member.user.username }}</h4>
+                                        <p>{{ member.user.email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge">{{ member.role }}</span></td>
+                            <td>{{ member.joined_at|date:"M d, Y" }}</td>
+                            {% if is_admin %}
+                            <td>
+                                <div class="member-actions">
+                                    <button class="btn-sm">Edit</button>
+                                    <button class="btn-sm btn-danger">Remove</button>
+                                </div>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty-state">No members found</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

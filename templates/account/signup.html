@@ -1,0 +1,46 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock head_title %}
+
+{% block content %}
+<div class="auth-card-inner">
+    <div class="auth-card-header">
+        <h1 class="auth-title">{% trans "Sign Up" %}</h1>
+        <p class="auth-subtitle">{% trans "Create your TaawaVault account to get started." %}</p>
+    </div>
+
+    <form class="auth-form signup" id="signup_form" method="post" action="{% url 'account_signup' %}" novalidate>
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="auth-form-errors">
+            {% for error in form.non_field_errors %}
+            <p class="auth-form-error">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% for field in form %}
+        <div class="auth-form-group{% if field.errors %} auth-form-group-error{% endif %}{% if field.field.widget.input_type == 'checkbox' %} auth-form-group-checkbox{% endif %}">
+            <label for="{{ field.id_for_label }}" class="auth-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <span class="auth-field-error">{{ field.errors.0 }}</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="auth-form-actions auth-form-actions-single">
+            <button type="submit" class="auth-btn auth-btn-primary">{% trans "Sign Up" %} &rarr;</button>
+        </div>
+    </form>
+
+    <p class="auth-switch">
+        {% blocktrans %}Already have an account? <a href="{{ login_url }}" class="auth-link-accent">Sign in</a>{% endblocktrans %}
+    </p>
+</div>
+{% endblock content %}

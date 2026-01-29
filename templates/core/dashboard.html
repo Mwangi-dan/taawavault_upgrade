@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Main Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-content">
+                <h3 class="kpi-label">Total Balance</h3>
+                <p class="kpi-value">{{ total_balance|floatformat:2 }}</p>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">👥</div>
+            <div class="kpi-content">
+                <h3 class="kpi-label">Active Groups</h3>
+                <p class="kpi-value">{{ groups_count }}</p>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-content">
+                <h3 class="kpi-label">This Month</h3>
+                <p class="kpi-value">--</p>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-content">
+                <h3 class="kpi-label">Growth</h3>
+                <p class="kpi-value">+0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+        <!-- Groups List -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>My Groups</h3>
+                <a href="{% url 'group_list' %}" class="btn-link">View All</a>
+            </div>
+            <div class="card-content">
+                {% if groups %}
+                <div class="groups-list">
+                    {% for group in groups %}
+                    <div class="group-item">
+                        <div class="group-info">
+                            <h4><a href="{% url 'group_detail' group.id %}">{{ group.name }}</a></h4>
+                            <p class="group-balance">{{ group.currency }} {{ group.balance_cache|floatformat:2 }}</p>
+                        </div>
+                        <div class="group-actions">
+                            <a href="{% url 'group_detail' group.id %}" class="btn-sm">View</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty-state">No groups yet. <a href="{% url 'group_list' %}">Create one</a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Recent Transactions</h3>
+            </div>
+            <div class="card-content">
+                {% if recent_transactions %}
+                <div class="transactions-list">
+                    {% for transaction in recent_transactions %}
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <span class="transaction-type {{ transaction.entry_type|lower }}">{{ transaction.entry_type }}</span>
+                            <span class="transaction-desc">{{ transaction.description|truncatewords:10 }}</span>
+                        </div>
+                        <div class="transaction-amount {% if transaction.amount < 0 %}negative{% else %}positive{% endif %}">
+                            {{ transaction.group.currency }} {{ transaction.amount|floatformat:2 }}
+                        </div>
+                        <div class="transaction-date">
+                            {{ transaction.occurred_at|date:"M d, Y" }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty-state">No recent transactions</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>Quick Stats</h3>
+            </div>
+            <div class="card-content">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Groups</span>
+                        <span class="stat-value">{{ groups_count }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Balance</span>
+                        <span class="stat-value">{{ total_balance|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Transactions - {{ group.name }}{% endblock %}
+{% block breadcrumb %}{{ group.name }} / Transactions{% endblock %}
+
+{% block content %}
+<div class="ledger-list">
+    <div class="page-header">
+        <h1>Transactions</h1>
+        <div class="header-actions">
+            <button class="btn-primary">New Transaction</button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+        <form method="get" class="filter-form">
+            <select name="entry_type" class="filter-select">
+                <option value="">All Types</option>
+                <option value="CONTRIBUTION" {% if entry_type == 'CONTRIBUTION' %}selected{% endif %}>Contributions</option>
+                <option value="EXPENSE" {% if entry_type == 'EXPENSE' %}selected{% endif %}>Expenses</option>
+                <option value="PENALTY" {% if entry_type == 'PENALTY' %}selected{% endif %}>Penalties</option>
+            </select>
+            <input type="date" name="start_date" value="{{ start_date }}" class="filter-input" placeholder="Start Date">
+            <input type="date" name="end_date" value="{{ end_date }}" class="filter-input" placeholder="End Date">
+            <button type="submit" class="btn-primary">Filter</button>
+        </form>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="content-card">
+        <div class="card-content">
+            {% if entries %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Member</th>
+                        <th>Amount</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.occurred_at|date:"M d, Y" }}</td>
+                        <td><span class="badge badge-{{ entry.entry_type|lower }}">{{ entry.entry_type }}</span></td>
+                        <td>{{ entry.description }}</td>
+                        <td>{{ entry.member.user.username|default:"-" }}</td>
+                        <td class="{% if entry.amount < 0 %}negative{% else %}positive{% endif %}">
+                            {{ group.currency }} {{ entry.amount|floatformat:2 }}
+                        </td>
+                        <td>{{ entry.reference|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-state">No transactions found</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

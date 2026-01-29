@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Groups{% endblock %}
+{% block breadcrumb %}Groups{% endblock %}
+
+{% block content %}
+<div class="group-list">
+    <div class="page-header">
+        <h1>My Groups</h1>
+        <button class="btn-primary">Create New Group</button>
+    </div>
+
+    {% if groups %}
+    <div class="groups-grid">
+        {% for group in groups %}
+        <div class="group-card">
+            <div class="group-card-header">
+                <h3><a href="{% url 'group_detail' group.id %}">{{ group.name }}</a></h3>
+                <span class="group-currency">{{ group.currency }}</span>
+            </div>
+            <div class="group-card-body">
+                <div class="group-balance">
+                    <span class="balance-label">Balance</span>
+                    <span class="balance-value">{{ group.balance_cache|floatformat:2 }}</span>
+                </div>
+                {% if group.description %}
+                <p class="group-description">{{ group.description|truncatewords:20 }}</p>
+                {% endif %}
+            </div>
+            <div class="group-card-footer">
+                <a href="{% url 'group_detail' group.id %}" class="btn-sm">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>You don't have any groups yet.</p>
+        <button class="btn-primary">Create Your First Group</button>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

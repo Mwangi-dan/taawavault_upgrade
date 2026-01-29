@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}{{ group.name }}{% endblock %}
+{% block breadcrumb %}{{ group.name }}{% endblock %}
+
+{% block content %}
+<div class="group-detail">
+    <!-- Group Header -->
+    <div class="group-header">
+        <div class="group-title">
+            <h1>{{ group.name }}</h1>
+            <p class="group-description">{{ group.description|default:"No description" }}</p>
+        </div>
+        <div class="group-balance-card">
+            <div class="balance-label">Current Balance</div>
+            <div class="balance-value">{{ group.currency }} {{ group.balance_cache|floatformat:2 }}</div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <a href="{% url 'group_detail' group.id %}" class="tab {% if request.resolver_match.url_name == 'group_detail' %}active{% endif %}">Overview</a>
+        <a href="{% url 'ledger_list' group.id %}" class="tab {% if request.resolver_match.url_name == 'ledger_list' %}active{% endif %}">Transactions</a>
+        <a href="{% url 'member_list' group.id %}" class="tab {% if request.resolver_match.url_name == 'member_list' %}active{% endif %}">Members</a>
+        <a href="{% url 'reports' group.id %}" class="tab {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">Reports</a>
+    </div>
+
+    <!-- Content -->
+    <div class="group-content">
+        <!-- Recent Transactions -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3>Recent Transactions</h3>
+                <a href="{% url 'ledger_list' group.id %}" class="btn-link">View All</a>
+            </div>
+            <div class="card-content">
+                {% if recent_transactions %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in recent_transactions %}
+                        <tr>
+                            <td>{{ transaction.occurred_at|date:"M d, Y" }}</td>
+                            <td><span class="badge badge-{{ transaction.entry_type|lower }}">{{ transaction.entry_type }}</span></td>
+                            <td>{{ transaction.description }}</td>
+                            <td class="{% if transaction.amount < 0 %}negative{% else %}positive{% endif %}">
+                                {{ group.currency }} {{ transaction.amount|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="empty-state">No transactions yet</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Members -->
+        <div class="content-card">
+            <div class="card-header">
+                <h3>Members</h3>
+                {% if membership.role == 'ADMIN' %}
+                <button class="btn-primary">Add Member</button>
+                {% endif %}
+            </div>
+            <div class="card-content">
+                {% if members %}
+                <div class="members-list">
+                    {% for member in members %}
+                    <div class="member-item">
+                        <div class="member-avatar">
+                            <span>{{ member.user.username|first|upper }}</span>
+                        </div>
+                        <div class="member-info">
+                            <h4>{{ member.user.get_full_name|default:member.user.username }}</h4>
+                            <p class="member-role">{{ member.role }}</p>
+                        </div>
+                        {% if membership.role == 'ADMIN' %}
+                        <div class="member-actions">
+                            <button class="btn-sm">Edit</button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty-state">No members</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

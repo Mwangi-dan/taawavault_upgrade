@@ -1,0 +1,46 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}TaawaVault{% endblock head_title %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body class="dark-theme auth-page">
+    <div class="auth-backdrop">
+        <div class="auth-backdrop-gradient"></div>
+        <div class="auth-backdrop-pattern"></div>
+    </div>
+
+    <div class="auth-wrapper">
+        <a href="{% url 'dashboard' %}" class="auth-brand">
+            <span class="auth-brand-icon">🔐</span>
+            <span class="auth-brand-text">TAWAAVAULT</span>
+        </a>
+
+        {% if messages %}
+        <div class="auth-messages" role="alert" aria-live="polite">
+            {% for message in messages %}
+            <div class="auth-message auth-message-{{ message.tags|default:'info' }}" data-message>
+                <span class="auth-message-text">{{ message }}</span>
+                <button type="button" class="auth-message-close" aria-label="{% trans 'Close' %}" data-close-message>&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <main class="auth-card">
+            {% block content %}{% endblock content %}
+        </main>
+
+        <p class="auth-footer-text">
+            © {% now "Y" %} TaawaVault. All rights reserved.
+        </p>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_body %}{% endblock extra_body %}
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_title %}Reports - {{ group.name }}{% endblock %}
+{% block breadcrumb %}{{ group.name }} / Reports{% endblock %}
+
+{% block content %}
+<div class="reports-page">
+    <div class="page-header">
+        <h1>Reports</h1>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3>Total Contributions</h3>
+            <p class="summary-value">{{ group.currency }} {{ total_contributions|floatformat:2 }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Expenses</h3>
+            <p class="summary-value">{{ group.currency }} {{ total_expenses|floatformat:2 }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Current Balance</h3>
+            <p class="summary-value">{{ group.currency }} {{ current_balance|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <!-- Report Options -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3>Generate Report</h3>
+        </div>
+        <div class="card-content">
+            <div class="report-options">
+                <div class="report-option">
+                    <h4>Group Summary Report</h4>
+                    <p>Complete financial summary for the group</p>
+                    <button class="btn-primary">Generate PDF</button>
+                </div>
+                <div class="report-option">
+                    <h4>Contribution Report</h4>
+                    <p>Member contribution history</p>
+                    <button class="btn-primary">Generate CSV</button>
+                </div>
+                <div class="report-option">
+                    <h4>Expense Report</h4>
+                    <p>Group expense breakdown</p>
+                    <button class="btn-primary">Generate PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TaawaVault{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">TAWAAVAULT</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'dashboard' %}" class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="{% url 'group_list' %}" class="nav-item {% if request.resolver_match.url_name == 'group_list' %}active{% endif %}">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Groups</span>
+                </a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'account_logout' %}" class="nav-item">
+                    <span class="nav-icon">🔒</span>
+                    <span class="nav-text">Sign Out</span>
+                </a>
+                {% else %}
+                <a href="{% url 'account_login' %}" class="nav-item">
+                    <span class="nav-icon">🔓</span>
+                    <span class="nav-text">Sign In</span>
+                </a>
+                {% endif %}
+            </nav>
+            <div class="sidebar-footer">
+                <div class="upgrade-card">
+                    <div class="upgrade-icon">⭐</div>
+                    <p>Upgrade to PRO for advanced features!</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <span class="breadcrumb">Pages / {% block breadcrumb %}Dashboard{% endblock %}</span>
+                    <h2 class="page-title">{% block page_title %}Main Dashboard{% endblock %}</h2>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search..." class="search-input">
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn">🔔</button>
+                        <button class="icon-btn">🌙</button>
+                        <button class="icon-btn">ℹ️</button>
+                        {% if user.is_authenticated %}
+                        <div class="user-avatar">
+                            <span>{{ user.username|first|upper }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>© 2026 TaawaVault. All Rights Reserved. Made with ❤️</p>
+                <div class="footer-links">
+                    <a href="#">Marketplace</a>
+                    <a href="#">License</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Blog</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

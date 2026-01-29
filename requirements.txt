@@ -1,0 +1,45 @@
+# Core Django
+Django==5.2.6
+djangorestframework==3.15.2
+django-allauth==0.57.0
+djangorestframework-simplejwt==5.3.1
+
+# Database
+psycopg2-binary==2.9.9
+django-fernet-fields-v2==0.9
+
+# Security & Authentication
+cryptography==42.0.5
+django-ratelimit==4.1.0
+django-auditlog==3.0.0
+django-cors-headers==4.3.1
+
+# Background Tasks
+celery==5.3.4
+redis==5.0.1
+
+# File Processing
+Pillow==10.4.0
+python-magic==0.4.27
+pyclamd==0.4.0
+
+# Reporting
+reportlab==4.0.9
+
+# AI Integration
+google-generativeai==0.3.2
+
+# Utilities
+python-decouple==3.8
+whitenoise==6.6.0
+gunicorn==21.2.0
+django-storages==1.14.2
+boto3==1.34.34
+
+# Monitoring & Logging
+structlog==24.1.0
+prometheus-client==0.19.0
+
+# Development
+django-extensions==3.2.3
+ipython==8.22.2
